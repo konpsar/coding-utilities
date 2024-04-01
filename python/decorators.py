@@ -11,7 +11,7 @@ def timer_decorator(func):
     return wrapper
 
 
-def timer_decorator_v2(output='stdout'):
+def timer_decorator_v2(output: str = 'stdout'):
     def decorator(func):
         def wrapper(*args, **kwargs):
             start_time = time.time()
@@ -27,7 +27,7 @@ def timer_decorator_v2(output='stdout'):
         return wrapper
     return decorator
 
-def cache_decorator(size=None):
+def cache_decorator(size: int = None):
     cache = {}
     def decorator(func):
         def wrapper(*args, **kwargs):
@@ -43,7 +43,7 @@ def cache_decorator(size=None):
         return wrapper
     return decorator
 
-def retry_decorator(tries=3, delay=0, backoff=0):
+def retry_decorator(tries: int, delay: int = 0, backoff: int = 1):
     def decorator(func):
         def wrapper(*args, **kwargs):
             for t in range(tries):
