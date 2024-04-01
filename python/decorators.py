@@ -43,15 +43,17 @@ def cache_decorator(size=None):
         return wrapper
     return decorator
 
-def retry_decorator(tries=3, delay=0):
+def retry_decorator(tries=3, delay=0, backoff=0):
     def decorator(func):
         def wrapper(*args, **kwargs):
-            for _ in range(tries):
+            for t in range(tries):
                 try:
                     return func(*args, **kwargs)
                 except Exception as e:
                     print(f"Exception: {e}")
-                    time.sleep(delay)
+                    actual_delay = delay * max(backoff * t, 1)
+                    print(f"Retrying in {actual_delay} seconds")
+                    time.sleep(actual_delay)
             return None
         return wrapper
     return decorator
