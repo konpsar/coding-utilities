@@ -27,12 +27,18 @@ def timer_decorator_v2(output='stdout'):
         return wrapper
     return decorator
 
-def cache_decorator(func):
+def cache_decorator(size=None):
     cache = {}
-    def wrapper(*args, **kwargs):
-        key = args
-        print(f'Cached value for args: {key}: {cache.get(key, 'Not cached')}')
-        if key not in cache:
-            cache[key] = func(*args, **kwargs)
-        return cache[key]
-    return wrapper
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            key = args
+            print(f"---> Current cache (start): {cache}")
+            print(f'------> Cached value for args: {key}: {cache.get(key, 'Not cached')}')
+            if key not in cache:
+                if size and len(cache) >= size:
+                    cache.popitem()
+                cache[key] = func(*args, **kwargs)
+            print(f"---------> Current cache (end): {cache}")
+            return cache[key]
+        return wrapper
+    return decorator
