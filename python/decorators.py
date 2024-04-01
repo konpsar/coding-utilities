@@ -42,3 +42,15 @@ def cache_decorator(size=None):
             return cache[key]
         return wrapper
     return decorator
+
+def retry_decorator(tries=3):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            for _ in range(tries):
+                try:
+                    return func(*args, **kwargs)
+                except Exception as e:
+                    print(f"Exception: {e}")
+            return None
+        return wrapper
+    return decorator
