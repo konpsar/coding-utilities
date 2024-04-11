@@ -31,7 +31,9 @@ def cache_decorator(size: int = None):
     cache = {}
     def decorator(func):
         def wrapper(*args, **kwargs):
-            key = args
+            key = tuple(args)
+            if kwargs:
+                key += tuple(kwargs.items())
             print(f"---> Current cache (start): {cache}")
             print(f'------> Cached value for args: {key}: {cache.get(key, 'Not cached')}')
             if key not in cache:

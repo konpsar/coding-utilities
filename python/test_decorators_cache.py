@@ -48,3 +48,14 @@ print(result)  # 12 (not cached -- deleted in prev call)
 result = test_cache_max_size_1(3, 4)
 print(result)  # 12 (cached - no sleep)
 
+
+print("Testing cache_decorator() args, kwars")
+@cache_decorator(5)
+def foo(x: float, y: float) -> float:
+    return x + y
+
+foo(1, y=1)   # not cached --> result: 2
+foo(1, y=9)   # not cached --> result: 10
+foo(x=1, y=9) # not cached --> result: 10
+foo(1, 1)   # not cached --> result: 2
+foo(1, y=1)   # cached --> result: 2
