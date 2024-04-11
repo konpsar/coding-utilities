@@ -1,4 +1,6 @@
 import time
+from typing import Protocol
+import sys
 
 def timer_decorator(func):
     def wrapper(*args, **kwargs):
@@ -26,6 +28,23 @@ def timer_decorator_v2(output: str = 'stdout'):
             return result
         return wrapper
     return decorator
+
+class Writable(Protocol):
+    def write(self, s: str) -> None: 
+        '''Implement write method'''
+
+def timer_decorator_v3(_func=None, *, output: Writable = sys.stdout):
+    if _func is None: # guard clause
+        return lambda func: timer_decorator_v3(func, output=output)
+
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        result = _func(*args, **kwargs)
+        end_time = time.time()
+        execution_time = end_time - start_time
+        output.write(f"Execution time: {execution_time} seconds\n")
+        return result
+    return wrapper
 
 def cache_decorator(size: int = None):
     cache = {}
