@@ -2,14 +2,14 @@ from decorators import *
 import time
 import sys
 
-print("Testing timer_decorator()")
-@timer_decorator
+print("Testing timer()")
+@timer
 def test_func1():
     time.sleep(1)
 
 test_func1()  # Exec time: ~1 second
 
-@timer_decorator
+@timer
 def test_func2(a, b):
     time.sleep(2)
     return a + b
@@ -17,14 +17,14 @@ def test_func2(a, b):
 result = test_func2(3, 4)
 print(result)  # Result: 7 Exec time: ~2 seconds
 
-print("Testing timer_decorator_v2() with stdout")
-@timer_decorator_v2()
+print("Testing timer_v2() with stdout")
+@timer_v2()
 def test_func1():
     time.sleep(1)
 
 test_func1()  # Exec time: ~1 second
 
-@timer_decorator_v2()
+@timer_v2()
 def test_func2(a, b):
     time.sleep(2)
     return a + b
@@ -32,14 +32,14 @@ def test_func2(a, b):
 result = test_func2(3, 4)
 print(result)  # Result: 7 Exec time: ~2 seconds
 
-print("Testing timer_decorator_v2() with file")
-@timer_decorator_v2(output='test_out.txt')
+print("Testing timer_v2() with file")
+@timer_v2(output='test_out.txt')
 def test_func1():
     time.sleep(1)
 
 test_func1()  # Exec time: ~1 second
 
-@timer_decorator_v2('test_out.log')
+@timer_v2('test_out.log')
 def test_func2(a, b):
     time.sleep(2)
     return a + b
@@ -47,7 +47,7 @@ def test_func2(a, b):
 result = test_func2(3, 4)
 print(result)  # Result: 7 Exec time: ~2 seconds
 
-@timer_decorator_v3(output = sys.stderr)
+@timer_v3(output = sys.stderr)
 def foo_stderr(a, b):
     time.sleep(2)
     return a + b
@@ -55,7 +55,7 @@ def foo_stderr(a, b):
 result = foo_stderr(3, 4)
 print("foo_stderr", result)  # Result: 7 Exec time: ~2 seconds
 
-@timer_decorator_v3(output = sys.stdout)
+@timer_v3(output = sys.stdout)
 def foo_stdout(a, b):
     time.sleep(2)
     return a + b
@@ -63,7 +63,7 @@ def foo_stdout(a, b):
 result = foo_stdout(3, 4)
 print("foo_stdout", result)  # Result: 7 Exec time: ~2 seconds
 
-@timer_decorator_v3(output = open('test_foo_file_out.txt', 'a'))
+@timer_v3(output = open('test_foo_file_out.txt', 'a'))
 def foo_file(a, b):
     time.sleep(2)
     return a + b
@@ -72,7 +72,7 @@ result = foo_file(3, 4)
 print("foo_file", result)  # Result: 7 Exec time: ~2 seconds
 
 
-@timer_decorator_v3
+@timer_v3
 def foo2(a, b):
     time.sleep(2)
     return a + b

@@ -2,7 +2,7 @@ import time
 from typing import Protocol
 import sys
 
-def timer_decorator(func):
+def timer(func):
     def wrapper(*args, **kwargs):
         start_time = time.perf_counter()
         try:
@@ -18,7 +18,7 @@ def timer_decorator(func):
     return wrapper
 
 
-def timer_decorator_v2(output: str = 'stdout'):
+def timer_v2(output: str = 'stdout'):
     def decorator(func):
         def wrapper(*args, **kwargs):
             start_time = time.perf_counter()
@@ -38,9 +38,9 @@ class Writable(Protocol):
     def write(self, s: str) -> None: 
         '''Implement write method'''
 
-def timer_decorator_v3(_func=None, *, output: Writable = sys.stdout):
+def timer_v3(_func=None, *, output: Writable = sys.stdout):
     if _func is None: # guard clause
-        return lambda func: timer_decorator_v3(func, output=output)
+        return lambda func: timer_v3(func, output=output)
 
     def wrapper(*args, **kwargs):
         start_time = time.perf_counter()
@@ -51,7 +51,7 @@ def timer_decorator_v3(_func=None, *, output: Writable = sys.stdout):
         return result
     return wrapper
 
-def cache_decorator(size: int = None):
+def cache(size: int = None):
     cache = {}
     def decorator(func):
         def wrapper(*args, **kwargs):
@@ -59,7 +59,7 @@ def cache_decorator(size: int = None):
             if kwargs:
                 key += tuple(kwargs.items())
             print(f"---> Current cache (start): {cache}")
-            print(f'------> Cached value for args: {key}: {cache.get(key, 'Not cached')}')
+            print(f"------> Cached value for args: {key}: {cache.get(key, 'Not cached')}")
             if key not in cache:
                 if size and len(cache) >= size:
                     cache.popitem()
@@ -69,7 +69,7 @@ def cache_decorator(size: int = None):
         return wrapper
     return decorator
 
-def retry_decorator(tries: int, delay: int = 0, backoff: int = 1):
+def retry(tries: int, delay: int = 0, backoff: int = 1):
     def decorator(func):
         def wrapper(*args, **kwargs):
             for t in range(tries):
