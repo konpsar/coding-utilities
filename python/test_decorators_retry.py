@@ -11,14 +11,19 @@ successful_func()
 def zero_div_error_function():
     return 1/0
 
-zero_div_error_function()
+try:
+    zero_div_error_function()
+except ZeroDivisionError as e:
+    print("ZeroDivisionError")
 
 @retry(tries=3)
 def failed_func():
     raise ValueError("Failed")
 
-failed_func()
-
+try:
+    failed_func()
+except ValueError as e:
+    print("ValueError")
 # --------------------
 
 print("Testing retry() with delay")
@@ -32,14 +37,19 @@ successful_func()
 def zeroDivErrorfunction():
     return 1/0
 
-zeroDivErrorfunction()
+try:
+    zeroDivErrorfunction()
+except ZeroDivisionError as e:
+    print("ZeroDivisionError")
 
 @retry(tries=3, delay=1)
 def failed_func():
     raise ValueError("Failed")
 
-failed_func()
-
+try:
+    failed_func()
+except ValueError as e:
+    print("ValueError")
 # --------------------
 
 print("Testing retry() with delay and backoff")
@@ -53,10 +63,17 @@ successful_func()
 def zeroDivErrorfunction():
     return 1/0
 
-zeroDivErrorfunction()
+try:
+    zeroDivErrorfunction()
+except ZeroDivisionError as e:
+    print("ZeroDivisionError")
 
 @retry(tries=3, delay=1, backoff=2)
 def failed_func():
     raise ValueError("Failed")
 
-failed_func()
+try:
+    failed_func()
+except ValueError as e:
+    print("ValueError")
+# --------------------
