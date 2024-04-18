@@ -66,6 +66,7 @@ def cache(size: int = None):
                 cache[key] = func(*args, **kwargs)
             print(f"---------> Current cache (end): {cache}")
             return cache[key]
+        wrapper.clear_cache = cache.clear
         return wrapper
     return decorator
 

@@ -59,3 +59,5 @@ foo(1, y=9)   # not cached --> result: 10
 foo(x=1, y=9) # not cached --> result: 10
 foo(1, 1)   # not cached --> result: 2
 foo(1, y=1)   # cached --> result: 2
+foo.clear_cache()
+foo(1, y=1)   # not cached --> result: 2
