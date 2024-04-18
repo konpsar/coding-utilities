@@ -1,6 +1,7 @@
 import time
 from typing import Protocol
 import sys
+from collections import deque
 
 def timer(func):
     def wrapper(*args, **kwargs):
@@ -67,6 +68,41 @@ def cache(size: int = None):
             print(f"---------> Current cache (end): {cache}")
             return cache[key]
         wrapper.clear_cache = cache.clear
+        return wrapper
+    return decorator
+
+
+def cache_deque(size: int = None):
+    cache_keys = deque()
+    cache_values = deque()
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            key = tuple(args)
+            if kwargs:
+                key += tuple(kwargs.items())
+            print(f"---> Current cache (start): {list(zip(cache_keys, cache_values))}")
+            if key in cache_keys:
+                index = cache_keys.index(key)
+                value = cache_values[index]
+                cache_keys.remove(key)
+                cache_keys.append(key)
+                cache_values.remove(value)
+                cache_values.append(value)
+            else:
+                if size and len(cache_keys) >= size:
+                    cache_keys.popleft()
+                    cache_values.popleft()
+                value = func(*args, **kwargs)
+                cache_keys.append(key)
+                cache_values.append(value)
+            return value
+
+        def clear_cache():
+            cache_keys.clear()
+            cache_values.clear()
+
+        wrapper.clear_cache = clear_cache
+
         return wrapper
     return decorator
 
