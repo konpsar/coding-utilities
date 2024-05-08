@@ -48,7 +48,12 @@ def timer_v3(_func=None, *, output: Writable = sys.stdout):
         result = _func(*args, **kwargs)
         end_time = time.perf_counter()
         execution_time = end_time - start_time
-        output.write(f"Execution time: {execution_time} seconds\n")
+        msg = f"Execution time: {execution_time:2.3f} seconds"
+        try:
+            output.write(msg+'\n')
+        except AttributeError:
+            print("Given output does not have a write method.")
+            print(msg)
         return result
     return wrapper
 
