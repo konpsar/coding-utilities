@@ -112,6 +112,30 @@ def cache_deque(size: int = None):
     return decorator
 
 
+
+def cache_deque_cyclical(_func = None, *, size: int = None):
+    if not _func:
+        return lambda func: cache_deque_cyclical(func, size=size)
+    
+    cache = deque(maxlen=size)
+    def wrapper(*args, **kwargs):
+        key = tuple(args)
+        if kwargs:
+            key += tuple(kwargs.items())
+        print(f"---> Current cache (start): {cache}")
+        for (k,v) in cache:
+            if k == key:
+                cache.remove((k,v))
+                cache.append((k,v))
+                return v
+        value = _func(*args, **kwargs)
+        cache.append((key, value))
+        return value
+    
+    wrapper.clear = cache.clear
+
+    return wrapper
+
 def retry_draft(tries: int, delay: int = 0, backoff: int = 1):
     def decorator(func):
         def wrapper(*args, **kwargs):
