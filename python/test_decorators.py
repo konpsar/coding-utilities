@@ -1,6 +1,8 @@
 from decorators import timer_v3
 import sys
 
+def dummy_function():
+    return "result"
 
 class MockWritable:
     # This can be any class that implements at least the write method (writable)
@@ -14,12 +16,8 @@ def test_timer_v3_with_Writable():
     # Given 
     mock_output = MockWritable()
 
-    @timer_v3(output=mock_output)
-    def dummy_function():
-        return "result"
-
     # When
-    result = dummy_function()
+    result = timer_v3(dummy_function, output=mock_output)()
     
     # Then
     assert result == "result"
@@ -27,11 +25,7 @@ def test_timer_v3_with_Writable():
     assert "Execution time:" in mock_output.outputs[0] and "seconds" in mock_output.outputs[0]
 
 def test_timer_v3_with_non_Writable(capsys):
-    @timer_v3(output="not writable")
-    def dummy_function():
-        return "result"
-
-    result = dummy_function()
+    result = timer_v3(dummy_function, output="not writable")()
     
     captured = capsys.readouterr()
     assert result == "result"
@@ -42,12 +36,8 @@ def test_timer_v3_with_mock_write(mocker):
     # Given
     mock_write = mocker.patch('sys.stdout.write')
 
-    @timer_v3(output=sys.stdout)
-    def dummy_function():
-        return "result"
-
     # When
-    result = dummy_function()
+    result = timer_v3(dummy_function, output=sys.stdout)()
 
     # Then
     mock_write.assert_called_once()
