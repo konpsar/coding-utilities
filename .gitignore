@@ -1,0 +1,4 @@
+**/__pycache__/**
+test*.txt
+test*.log
+**/.DS_Store
